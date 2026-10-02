@@ -23,9 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.zanoon_rapidrecall.controller.MainViewModel
 import com.example.zanoon_rapidrecall.ui.theme.ZanoonRapidRecallTheme
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun GameLoop(modifier: Modifier, mainViewModel: MainViewModel, onReturn: () -> Unit) {
@@ -35,11 +37,13 @@ fun GameLoop(modifier: Modifier, mainViewModel: MainViewModel, onReturn: () -> U
     var finishedShowing by remember { mutableStateOf(false) }
     var userInput by remember { mutableStateOf("") }
     var answerCorrect by remember { mutableStateOf<Boolean?>(null) }
+    var submittedSequence by remember { mutableStateOf<List<Int>>(emptyList()) }
+    var submitted by remember { mutableStateOf(false) }
 
     // Showing each num in a timely manner
     LaunchedEffect(Unit) {
         while (currentIndex < generatedNums.size) {
-            delay(1000)  // 1 Second
+            delay(1500.milliseconds)  // 1 Second
 
             currentIndex ++
         }
@@ -55,9 +59,7 @@ fun GameLoop(modifier: Modifier, mainViewModel: MainViewModel, onReturn: () -> U
         ) {
 
             if (!finishedShowing && currentIndex < generatedNums.size) {
-                Text(
-                    text = generatedNums[currentIndex].toString()
-                )
+                Text(text = generatedNums[currentIndex].toString(), fontSize = 32.sp)
             } else {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -73,27 +75,43 @@ fun GameLoop(modifier: Modifier, mainViewModel: MainViewModel, onReturn: () -> U
                             userInput = newValue
                         },
                         label = { Text("Sequence") },
-                        placeholder = { Text(" Example 12 7 35 4")}
+                        placeholder = { Text(" Example 1 2 6 3")}
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Button(modifier = Modifier.padding(8.dp),
+                        enabled = !submitted,
                         onClick = {
                             val userSequence = userInput
                                 .trim()
                                 .split(" ")
                                 .mapNotNull { it.toIntOrNull()}
-
+                            submittedSequence = userSequence
                             answerCorrect = mainViewModel.submitSequence(userSequence)
+                            submitted = true
                         }) {
-                        Text("Submit")
+                        Text(if (submitted) "Submitted" else "Submit")
                     }
-                    if (answerCorrect == true) {
-                        Text("Correct")
-                    } else {
-                        Text("Incorrect")
+                    when (answerCorrect) {
+                        true -> Text("Correct")
+                        false -> Text("Incorrect")
+                        null -> {}
                     }
+
+                    if (answerCorrect != null) {
+                        Text(
+                            "Correct Sequence: ${
+                                mainViewModel.getGeneratedNums().joinToString(" ")
+                            }"
+                        )
+                        Text(
+                            "Your Input: ${
+                                submittedSequence.joinToString(" ")
+                            }"
+                        )
+                    }
+
                 }
             }
 
