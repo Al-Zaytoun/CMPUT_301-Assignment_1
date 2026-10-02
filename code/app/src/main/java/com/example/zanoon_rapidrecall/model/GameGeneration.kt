@@ -12,7 +12,6 @@ class GameGeneration {
     private var userNums = mutableListOf<Int>()
     private var correctGames: Int = 0
     private var totalGames: Int = 0
-    private var timestamp: Long = 0L
 
     fun generateNums(userInput: Int): List<Int> {
         randomNums.clear()
@@ -31,14 +30,6 @@ class GameGeneration {
     fun setUserInput(nums: List<Int>) {
         userNums.clear()
         userNums.addAll(nums)
-    }
-
-    fun getUserInput() : List<Int>{
-        return userNums
-    }
-
-    fun setTime() {
-        timestamp = System.currentTimeMillis()
     }
 
     fun determineIfSequenceCorrect(userNums: List<Int>): Boolean {

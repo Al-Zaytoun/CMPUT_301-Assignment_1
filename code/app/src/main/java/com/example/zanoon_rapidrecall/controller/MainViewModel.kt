@@ -14,8 +14,6 @@ class MainViewModel : ViewModel() {
 
     private val gameGeneration = GameGeneration()
     private val logging = Logging()
-
-    var currentNumber: Int? = null
     var gameStarted: Boolean = false
 
     fun gameBegin(userInput: Int) {
@@ -44,9 +42,6 @@ class MainViewModel : ViewModel() {
     }
     fun getGeneratedNums(): List<Int> {
         return gameGeneration.getPredefinedNums()
-    }
-    fun getCurrentNumber(index: Int): Int {
-        return getGeneratedNums()[index]
     }
     fun getLogs(): List<Log> {
         return logging.getLogs()
