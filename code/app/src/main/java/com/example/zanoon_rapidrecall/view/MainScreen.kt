@@ -38,7 +38,8 @@ fun MainScreen(
     // Show game Loop UI file if game has begun
     if (showGameLoop) {
         GameLoop(
-            modifier = Modifier
+            modifier = Modifier,
+            mainViewModel = MainViewModel()
         )
     } else {
         Column(

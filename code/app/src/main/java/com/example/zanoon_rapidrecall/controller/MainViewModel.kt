@@ -2,28 +2,47 @@ package com.example.zanoon_rapidrecall.controller
 
 import androidx.lifecycle.ViewModel
 import com.example.zanoon_rapidrecall.model.GameGeneration
+import com.example.zanoon_rapidrecall.model.Log
 
 class MainViewModel : ViewModel() {
 
     private val gameGeneration = GameGeneration()
-    private var preGeneratedNums: List<Int> = emptyList()
+    private val logging = Logging()
+
     var currentNumber: Int? = null
     var gameStarted: Boolean = false
 
     fun gameBegin(userInput: Int) {
-        preGeneratedNums = gameGeneration.generateNums(userInput)
-        currentNumber = gameGeneration.getCurrentNumber()
+        gameGeneration.generateNums(userInput)
         gameStarted = true
 
     }
-    fun submitAnswer(userInput: Int): Boolean {
-
-        val correct = gameGeneration.determineIfNumCorrect(
-            gameGeneration.getCurrentNumber(),
-            userInput
-        )
+    fun submitSequence(userInput: List<Int>): Boolean {
         gameGeneration.setUserInput(userInput)
-        gameGeneration.updateIndex()
+
+        val correct =
+            gameGeneration.determineIfSequenceCorrect(userInput)
+
+        val targetSequence =
+            gameGeneration.getPredefinedNums()
+
+        logging.addLog(
+            sequenceLength = targetSequence.size,
+            userInput = userInput,
+            targetSequence = targetSequence,
+            correct = correct,
+            timestamp = System.currentTimeMillis()
+        )
+
         return correct
+    }
+    fun getGeneratedNums(): List<Int> {
+        return gameGeneration.getPredefinedNums()
+    }
+    fun getCurrentNumber(index: Int): Int {
+        return getGeneratedNums()[index]
+    }
+    fun getLogs(): List<Log> {
+        return logging.getLogs()
     }
 }

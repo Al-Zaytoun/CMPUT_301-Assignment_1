@@ -2,7 +2,6 @@ package com.example.zanoon_rapidrecall.model
 
 class GameGeneration {
     private var randomNums = mutableListOf<Int>()
-    private var randomIdx = 0
     private var userNums = mutableListOf<Int>()
     private var correctGames: Int = 0
     private var totalGames: Int = 0
@@ -18,16 +17,13 @@ class GameGeneration {
         return randomNums
     }
 
-    fun getCurrentNumber(): Int {
-        return randomNums[randomIdx]
+    fun getPredefinedNums(): List<Int> {
+        return randomNums
     }
 
-    fun updateIndex() {
-        randomIdx++
-    }
-
-    fun setUserInput(num: Int) {
-        userNums.add(num)
+    fun setUserInput(nums: List<Int>) {
+        userNums.clear()
+        userNums.addAll(nums)
     }
 
     fun getUserInput() : List<Int>{
@@ -38,12 +34,12 @@ class GameGeneration {
         timestamp = System.currentTimeMillis()
     }
 
-    fun determineIfNumCorrect(randomNum: Int, userNum: Int): Boolean {
-        if (randomNum.equals(userNum)) {
+    fun determineIfSequenceCorrect(userNums: List<Int>): Boolean {
+        totalGames++
+        if (randomNums.equals(userNums)) {
             correctGames++
             return true
         }
-        totalGames++
         return false
     }
 
