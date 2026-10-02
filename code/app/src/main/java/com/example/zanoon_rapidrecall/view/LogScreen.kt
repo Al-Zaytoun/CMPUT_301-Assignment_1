@@ -86,12 +86,19 @@ fun LogScreen(modifier: Modifier, mainViewModel: MainViewModel, onReturn: () -> 
 @Preview(showBackground = true)
 @Composable
 fun LogScreenPreview() {
+    val previewViewModel = MainViewModel()
+
+    previewViewModel.gameBegin(3)
+
+    val target = previewViewModel.getGeneratedNums()
+
+    previewViewModel.submitSequence(target)
+
     ZanoonRapidRecallTheme {
         LogScreen(
             modifier = Modifier,
-            mainViewModel = MainViewModel(),
+            mainViewModel = previewViewModel,
             onReturn = {}
-
         )
     }
 }

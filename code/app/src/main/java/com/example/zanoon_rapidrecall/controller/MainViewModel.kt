@@ -45,4 +45,15 @@ class MainViewModel : ViewModel() {
     fun getLogs(): List<Log> {
         return logging.getLogs()
     }
+    fun getTotalAttempts(): Int {
+        return gameGeneration.getTotalGames()
+    }
+
+    fun getCorrectAttempts(): Int {
+        return gameGeneration.getCorrectGames()
+    }
+
+    fun getAccuracy(): Float {
+        return gameGeneration.determineAccuracy()
+    }
 }

@@ -33,13 +33,42 @@ fun MainScreen(
     viewModel: MainViewModel
 ) {
     var showGameLoop by remember { mutableStateOf(false) }
+    var showSummary by remember { mutableStateOf(false) }
+    var showLog by remember { mutableStateOf(false) }
     var chosenInput by remember { mutableStateOf("") }
+
+    // Show the Summary UI file if pressed
+    if (showSummary) {
+        SummaryScreen(
+            modifier = modifier,
+            mainViewModel = viewModel,
+            onReturn = {
+                showSummary = false
+            }
+        )
+        return
+    }
+
+    // SHow the Log UI file if pressed
+    if (showLog) {
+        LogScreen(
+            modifier = modifier,
+            mainViewModel = viewModel,
+            onReturn = {
+                showLog = false
+            }
+        )
+        return
+    }
 
     // Show game Loop UI file if game has begun
     if (showGameLoop) {
         GameLoop(
             modifier = Modifier,
-            mainViewModel = MainViewModel()
+            mainViewModel = viewModel,
+            onReturn = {
+                showGameLoop = false
+            }
         )
     } else {
         Column(
@@ -103,14 +132,18 @@ fun MainScreen(
             ) {
                 Button(
                     modifier = Modifier.padding(8.dp),
-                    onClick = {}
+                    onClick = {
+                        showLog = true
+                    }
                 ) {
                     Text("Log")
                 }
 
                 Button(
                     modifier = Modifier.padding(8.dp),
-                    onClick = {}
+                    onClick = {
+                        showSummary = true
+                    }
                 ) {
                     Text("Attempt Summary")
                 }

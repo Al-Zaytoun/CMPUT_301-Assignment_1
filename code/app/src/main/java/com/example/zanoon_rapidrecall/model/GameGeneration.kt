@@ -42,8 +42,18 @@ class GameGeneration {
         }
         return false
     }
+    fun getCorrectGames(): Int {
+        return correctGames
+    }
+    fun getTotalGames(): Int {
+        return totalGames
+    }
+
 
     fun determineAccuracy(): Float{
-        return (correctGames.toFloat() / totalGames.toFloat())
+        if (totalGames == 0) {
+            return 0f
+        }
+        return (correctGames.toFloat() / totalGames.toFloat()) * 100
     }
 }

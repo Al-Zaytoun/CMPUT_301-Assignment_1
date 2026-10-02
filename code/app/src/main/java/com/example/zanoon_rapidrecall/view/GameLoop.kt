@@ -28,7 +28,7 @@ import com.example.zanoon_rapidrecall.ui.theme.ZanoonRapidRecallTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun GameLoop(modifier: Modifier, mainViewModel: MainViewModel) {
+fun GameLoop(modifier: Modifier, mainViewModel: MainViewModel, onReturn: () -> Unit) {
 
     val generatedNums = mainViewModel.getGeneratedNums()
     var currentIndex by remember { mutableIntStateOf(0) }
@@ -48,7 +48,9 @@ fun GameLoop(modifier: Modifier, mainViewModel: MainViewModel) {
     Column(modifier = Modifier.fillMaxSize()) {
 
         Box(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
 
@@ -102,7 +104,7 @@ fun GameLoop(modifier: Modifier, mainViewModel: MainViewModel) {
         ) {
             Button(
                 modifier = Modifier.padding(8.dp),
-                onClick = {}
+                onClick = onReturn
             ) {
                 Text("Return")
             }
@@ -117,7 +119,8 @@ fun GameLoopPreview() {
     ZanoonRapidRecallTheme {
         GameLoop(
             modifier = Modifier,
-            mainViewModel = MainViewModel()
+            mainViewModel = MainViewModel(),
+            onReturn = {}
         )
     }
 }
